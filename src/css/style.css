@@ -1,0 +1,61 @@
+.footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 60px;
+	background-color: #000;
+}
+
+.footer > div {
+	text-align: center;
+	color: #FFF;
+}
+
+#view {
+	padding-top: 100px;
+}
+
+div.search-group {
+	padding-top: 50px;
+	width: 100%;
+	text-align: center;
+}
+
+input.main-search {
+	outline: none;
+	border-radius: 10px;
+	border-color: #F11E22;
+	width: 320px;
+	height: 50px;
+	font-size: 24px;
+	padding: 15px 5px;
+}
+
+div.filter-group > label {
+	font-size: 24px;
+	font-weight: normal;
+}
+
+div.page-header {
+	font-size: 30px;
+	font-weight: bold;
+}
+
+div.button-group {
+	margin-top: 30px;
+}
+
+button.go-button {
+	width: 100px;
+	height: 50px;
+	font-size: 24px;
+	font-weight: bold;
+	color: #FFF;
+	background-color: #F11E22;
+	border: none;
+	outline-color: #000;
+}
+
+button.go-button:hover {
+	opacity: 0.8;
+}
