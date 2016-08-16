@@ -3,7 +3,8 @@ require.config({
         'text': '/lib/js/text',
         'lib': '/lib/js',
         'js': '/src/js',
-        'partials': '/partials'
+        'partials': '/partials',
+        'templates': '/templates'
     }
 });
 
@@ -24,9 +25,20 @@ require(
                     var query = document.getElementById('search-query').value;
                     var filter = document.getElementById('filter').value;
 
+                    query = query.replace(/ /g, "_");
+
+                    if(query.trim().length < 3) {
+                        var alertMessage = document.getElementsByClassName("alert-danger")[0];
+
+                        if(alertMessage) {
+                            alertMessage.style.display = "block";
+                        }
+
+                        return;
+                    }
+
                     window.location.hash = '/comics/list/' + filter + '/' + query;
                 };
-
                 var goButton = document.getElementById('go-button');
                 
                 if(!goButton)
@@ -43,13 +55,43 @@ require(
         router.routeProvider.register('/comics/list/:filter/:query', 'comics', function (urlParams) {
             var options = {};
 
-            options[urlParams["filter"]] = urlParams.query;
+            switch(urlParams["filter"]) {
+                case "comics":
+                    options["title"] = urlParams.query.replace(/_/g, " ");
+                    break;
+                case "characters":
+                    options["name"] = urlParams.query.replace(/_/g, " ");
+                    break;
+                case "series":
+                    options["title"] = urlParams.query.replace(/_/g, " ");
+            }
 
-            marvelConnector.request('comics', null, null, options, function (data) {
-                var obj = data.results;
-                var tmp = '<table>{{#.}}<li>{{title}}</li>{{/.}}</table>';
-                var panel = document.getElementById('main-panel');
-                panel.innerHTML = Mustache.render(tmp, obj);
+            marvelConnector.request(urlParams["filter"], null, null, options, function (data) {
+                var obj;
+
+                if(urlParams["filter"] == "comics") {
+                    obj = data.results;
+
+                    for(var x in obj) {
+                        obj[x].onSaleDate = new Date(obj[x].dates[0].date).toAusDate();
+                    }
+                }
+
+                if(urlParams["filter"] == "characters") {
+                    obj = data.results[0];
+                }
+
+                var templateName = urlParams["filter"] + "List.html";
+
+                require(['text!templates/' + templateName], function (template) {
+                    var panel = document.getElementById('main-panel');
+                    panel.innerHTML = Mustache.render(template, obj);
+                });
+
+                var header = document.getElementById('header');
+                var headerObj = { header: 'List of Comics by Title --- ' + urlParams.query.replace(/_/g, " ") };
+                var tmp = '{{ header }}';
+                header.innerHTML = Mustache.render(tmp, headerObj);                
             });
         });
 

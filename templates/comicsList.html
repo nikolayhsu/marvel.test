@@ -1,0 +1,27 @@
+<div class="table-responsive">
+	<table class="table table-hover">
+		<thead>
+			<th>&nbsp;</th>
+			<th>Series</th>
+			<th>Issue</th>
+			<th>On Sale</th>
+			<th>Description</th>
+		</thead>
+		<tbody>
+			{{#.}}
+			<tr>
+				<td class="col-md-1"><img src="{{ thumbnail.path }}/portrait_small.jpg"></img></td>
+				<td class="col-md-2">{{ series.name }}</td>
+				<td class="col-md-1">{{ issueNumber }}</td>
+				<td class="col-md-2">{{ onSaleDate  }}</td>
+				<td class="col-md-10">{{ #description }}{{{ description }}}{{/description}}{{^description}}No Description Provided{{/description}}</td>
+			</tr>
+			{{/.}}
+			{{^.}}
+				<tr>
+					<td colspan="5" class="no-result">No Results Found</td>	
+				</tr>
+			{{/.}}
+		</tbody>
+	</table>
+</div>
