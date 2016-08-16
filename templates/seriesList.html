@@ -1,0 +1,34 @@
+{{#.}}
+	<div class="row series-bio">
+		<div class="col-md-2">
+			<img src="{{ thumbnail.path }}/portrait_small.jpg"></img>
+		</div>
+		<div class="col-md-4 series-title">
+			{{title}}
+		</div>
+		<div class="col-md-6">
+			{{ #description }}{{{ description }}}{{/description}}{{^description}}No Description Provided{{/description}}
+		</div>
+	</div>
+	<div class="table-responsive">
+		<table class="table table-hover">
+			<thead>
+				<th class="col-md-2 text-center">#</th>
+				<th class="col-md-10">Comics</th>
+			</thead>
+			<tbody>
+				{{#comics.items}}
+				<tr>
+					<td class="col-md-2 text-center">{{ index }}</td>
+					<td class="col-md-10">{{ name }}</td>
+				</tr>
+				{{/comics.items}}
+				{{^comics.items}}
+					<tr>
+						<td colspan="2" class="no-result">No Results Found</td>	
+					</tr>
+				{{/comics.items}}
+			</tbody>
+		</table>
+	</div>
+{{/.}}

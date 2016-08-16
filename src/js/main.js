@@ -18,6 +18,9 @@ require(
         window.addEventListener('hashchange', router.routeHandler.router);
         // Listen on page load:
         // window.addEventListener('load', router.routeHandler.router);
+        router.routeProvider.register('/404', '404', function (urlParams) {
+            // NO ACTION
+        });
 
         router.routeProvider.register('/', 'home', function (urlParams) {
             var bindGoButton = function () {
@@ -79,6 +82,19 @@ require(
 
                 if(urlParams["filter"] == "characters") {
                     obj = data.results[0];
+
+                    for(var i = 0; i < obj.comics.items.length; i++) {
+                        obj.comics.items[i].index = i + 1;
+                    }
+                }
+
+                if(urlParams["filter"] == "series") {
+                    obj = data.results;
+                    for(var i = 0; i < obj.length; i++) {
+                        for(var j = 0; j < obj[i].comics.items.length; j++) {
+                            obj[i].comics.items[j].index = j + 1;
+                        }
+                    }
                 }
 
                 var templateName = urlParams["filter"] + "List.html";
@@ -89,7 +105,7 @@ require(
                 });
 
                 var header = document.getElementById('header');
-                var headerObj = { header: 'List of Comics by Title --- ' + urlParams.query.replace(/_/g, " ") };
+                var headerObj = { header: 'List of Comics by ' + urlParams["filter"] + ' --- ' + urlParams.query.replace(/_/g, " ") };
                 var tmp = '{{ header }}';
                 header.innerHTML = Mustache.render(tmp, headerObj);                
             });

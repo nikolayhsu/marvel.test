@@ -1,23 +1,25 @@
-<div class="table-responsive">
-	<div class="col-md-6">
+<div class="container character-bio">
+	<div class="col-md-3 text-center">
 		<img src="{{ thumbnail.path }}/portrait_fantastic.jpg"></img>
 	</div>
-	<div class="col-md-6">
+	<div class="col-md-9">
 		<ul>
 			<li>Name: {{ name }}</li>
 			<li>{{ description }}</li>
 		</ul>
 	</div>
+</div>
+<div class="table-responsive">
 	<table class="table table-hover">
 		<thead>
-			<th>&nbsp;</th>
+			<th class="text-center">#</th>
 			<th>Comics</th>
 		</thead>
 		<tbody>
 			{{#comics.items}}
 			<tr>
-				<td class="col-md-1">{{ @index }}</td>
-				<td class="col-md-2">{{ name }}</td>
+				<td class="col-md-2 text-center">{{ index }}</td>
+				<td class="col-md-10">{{ name }}</td>
 			</tr>
 			{{/comics.items}}
 			{{^comics.items}}

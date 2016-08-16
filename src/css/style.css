@@ -52,8 +52,17 @@ div.page-header {
 	font-weight: bold;
 }
 
+div.series-title {
+	font-size: 20px;
+	font-weight: bold;
+}
+
 div.button-group {
 	margin-top: 30px;
+}
+
+div.series-bio {
+	margin-bottom: 10px;
 }
 
 button.go-button {
@@ -77,6 +86,10 @@ td.no-result {
 	background-color: #CCC;
 }
 
+div.character-bio {
+	font-size: 20px;
+}
+
 @media (max-width: 978px) {
     #view {
 		padding-top: 50px;
@@ -89,5 +102,10 @@ td.no-result {
 	div.page-header {
 		font-size: 24px;
 		font-weight: bold;
+	}
+
+	div.character-bio {
+		margin-top: 50px;
+		font-size: 16px;
 	}
 }

@@ -30,6 +30,10 @@ define(['js/marvelConnector'], function () {
 							return routes[x];
 					}
 				}
+			}
+
+			if(!route) {
+				return routes["/404"];
 			}			
 
 			return routes[url];
