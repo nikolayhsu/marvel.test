@@ -4,7 +4,7 @@ define(['js/marvelConnector'], function () {
 	var marvelConnector = (function() {
 		var publicKey = "c3a3e24b521f879368293343d5f7cb6f";
 		var privateKey = "ae4e4019955d0a0d36ed44c91e89d06c23290ce1";
-		var marvelBaseUrl = "http://gateway.marvel.com/v1/public/";
+		var marvelBaseUrl = "https://gateway.marvel.com/v1/public/";
 
 		var getHash = function (ts) {
 			return CryptoJS.MD5(ts + privateKey + publicKey);
