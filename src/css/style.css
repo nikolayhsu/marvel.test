@@ -133,3 +133,9 @@ div.character-bio {
 		padding-top: 50%;
 	}
 }
+
+@media (max-width: 320px) {
+	input.main-search {
+		width: 270px;
+	}
+}
