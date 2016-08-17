@@ -1,6 +1,6 @@
 'use strict';
 
-define(['js/marvelConnector'], function () {
+define([], function () {
 	var marvelConnector = (function() {
 		var publicKey = "c3a3e24b521f879368293343d5f7cb6f";
 		var privateKey = "ae4e4019955d0a0d36ed44c91e89d06c23290ce1";
@@ -10,7 +10,7 @@ define(['js/marvelConnector'], function () {
 			return CryptoJS.MD5(ts + privateKey + publicKey);
 		}
 
-		var request = function (category, itemId, filter, options, successCallBack, errorCallBack) {
+		var request = function (category, options, successCallBack, errorCallBack) {
 			var ts = Date.now();
 			var hash = getHash(ts);
 			var query = marvelBaseUrl;
@@ -30,21 +30,11 @@ define(['js/marvelConnector'], function () {
 				return;
 			}
 
-			query += category;
-
-			if(itemId) {
-				query += '/' + itemId;
-			}
-
-			if(filter) {
-				query += '/' + filter;
-			}
-
-			query += '?ts=' + ts + '&apikey=' + publicKey + '&hash=' + hash;
+			query += `${category}?ts=${ts}&apikey=${publicKey}&hash=${hash}`;
 
 			if(options && typeof options === 'object') {
-				for(var x in options) {
-					query += '&' + x + '=' + options[x];
+				for(var key in options) {
+					query += `&${key}=${options[key]}`;
 				}
 			}
 

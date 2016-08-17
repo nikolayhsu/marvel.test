@@ -16,98 +16,121 @@ require(
     function (router, marvelConnector) {
         // Listen on hash change:
         window.addEventListener('hashchange', router.routeHandler.router);
-        // Listen on page load:
-        // window.addEventListener('load', router.routeHandler.router);
+
+        var switchOverlay = function (isShown) {
+            var overlay = document.getElementById('overlay');
+
+            overlay.style.display = isShown ? "block" : "none";
+        }
+
         router.routeProvider.register('/404', '404', function (urlParams) {
-            // NO ACTION
+            // 404 Page
+            switchOverlay(false);
         });
 
         router.routeProvider.register('/', 'home', function (urlParams) {
-            var bindGoButton = function () {
-                var submitSearch = function () {
-                    var query = document.getElementById('search-query').value;
-                    var filter = document.getElementById('filter').value;
-
-                    query = query.replace(/ /g, "_");
-
-                    if(query.trim().length < 3) {
-                        var alertMessage = document.getElementsByClassName("alert-danger")[0];
-
-                        if(alertMessage) {
-                            alertMessage.style.display = "block";
-                        }
-
-                        return;
-                    }
-
-                    window.location.hash = '/comics/list/' + filter + '/' + query;
-                };
-                var goButton = document.getElementById('go-button');
-                
-                if(!goButton)
+            var submitSearch = function (event) {
+                if(!event)
                     return;
 
-                goButton.addEventListener("click", submitSearch, false);
+                if(event.type == "keyup" && event.keyCode != 13)
+                    return;
 
-                clearInterval(myVar);
+                var query = document.getElementById('search-query').value;
+                var filter = document.getElementById('filter').value;
+
+                query = query.replace(/ /g, "_");
+
+                if(query.trim().length < 3) {
+                    var alertMessage = document.getElementsByClassName("alert-danger")[0];
+
+                    if(alertMessage) {
+                        alertMessage.style.display = "block";
+                    }
+
+                    return;
+                }
+
+                window.location.hash = `/comics/list/${filter}/${query}`;
+            };
+
+            var bindElements = function () {
+                var goButton = document.getElementById('go-button');
+                var searchQuery = document.getElementById('search-query');
+                
+                if(!(goButton && searchQuery))
+                    return;
+
+                goButton.onclick = submitSearch;
+                searchQuery.onkeyup = submitSearch;
+
+                clearInterval(interval);
             }
 
-            var myVar = setInterval(function(){ bindGoButton() }, 1000);
+            var interval = setInterval(function(){ bindElements() }, 1000);
+
+            switchOverlay(false);
         });
 
         router.routeProvider.register('/comics/list/:filter/:query', 'comics', function (urlParams) {
+            switchOverlay(true);
+
             var options = {};
 
-            switch(urlParams["filter"]) {
-                case "comics":
-                    options["title"] = urlParams.query.replace(/_/g, " ");
-                    break;
-                case "characters":
-                    options["name"] = urlParams.query.replace(/_/g, " ");
-                    break;
-                case "series":
-                    options["title"] = urlParams.query.replace(/_/g, " ");
+            var filters = {
+                "comics": "title",
+                "characters": "name",
+                "series": "title"
+            };
+
+            if(!filters[urlParams.filter]) {
+                window.location.hash = '/404';
+                return;
             }
 
-            marvelConnector.request(urlParams["filter"], null, null, options, function (data) {
-                var obj;
+            options[filters[urlParams.filter]] = urlParams.query.replace(/_/g, " ");
 
-                if(urlParams["filter"] == "comics") {
-                    obj = data.results;
+            marvelConnector.request(urlParams.filter, options, function (data) {
+                var model;
 
-                    for(var x in obj) {
-                        obj[x].onSaleDate = new Date(obj[x].dates[0].date).toAusDate();
+                if(urlParams.filter == "comics") {
+                    model = data.results;
+
+                    for(var x in model) {
+                        model[x].onSaleDate = new Date(model[x].dates[0].date).toAusDate();
                     }
                 }
 
-                if(urlParams["filter"] == "characters") {
-                    obj = data.results[0];
+                if(urlParams.filter == "characters") {
+                    model = data.results[0];
 
-                    for(var i = 0; i < obj.comics.items.length; i++) {
-                        obj.comics.items[i].index = i + 1;
-                    }
-                }
-
-                if(urlParams["filter"] == "series") {
-                    obj = data.results;
-                    for(var i = 0; i < obj.length; i++) {
-                        for(var j = 0; j < obj[i].comics.items.length; j++) {
-                            obj[i].comics.items[j].index = j + 1;
+                    if(model) {
+                        for (let [index, item] of model.comics.items.entries()) {
+                            item.index = index + 1;    
                         }
                     }
                 }
 
-                var templateName = urlParams["filter"] + "List.html";
+                if(urlParams.filter == "series") {
+                    model = data.results;
 
-                require(['text!templates/' + templateName], function (template) {
+                    for(let series of model) {
+                        for (let [index, item] of series.comics.items.entries()) {
+                            item.index = index + 1;
+                        }
+                    }
+                }
+
+                var templateName = urlParams.filter + "List.html";
+
+                require([`text!templates/${templateName}`], function (template) {
                     var panel = document.getElementById('main-panel');
-                    panel.innerHTML = Mustache.render(template, obj);
+                    panel.innerHTML = Mustache.render(template, model);
+                    switchOverlay(false);
                 });
 
                 var header = document.getElementById('header');
-                var headerObj = { header: 'List of Comics by ' + urlParams["filter"] + ' --- ' + urlParams.query.replace(/_/g, " ") };
-                var tmp = '{{ header }}';
-                header.innerHTML = Mustache.render(tmp, headerObj);                
+                header.innerHTML = 'List of Comics by ' + urlParams.filter + ' --- ' + urlParams.query.replace(/_/g, " ");               
             });
         });
 

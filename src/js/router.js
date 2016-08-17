@@ -1,38 +1,35 @@
 // Based on http://joakim.beng.se/blog/posts/a-javascript-router-in-20-lines.html
 'use strict';
 
-define(['js/marvelConnector'], function () {
+define([], function () {
 	var routeProvider = (function () {
 		var routes = {};
 
 		function getRoute(url) {
-			var route = routes[url];
-			var urlParams;
-			var routeTokens;
+			var tempRoute = routes[url];
+			var urlParams = [];
+			var routeTokens = [];
 
-			if(!route) {
+			if(!tempRoute) {
 				urlParams = url.split('/');
 
-				for(var x in routes) {
-					routeTokens = x.split('/');
+				for(var route in routes) {
+					routeTokens = route.split('/');
 					
 					if(urlParams.length != routeTokens.length)
 						continue;
 
-					for(var i = 1; i < routeTokens.length; i++) {
-						if(routeTokens[i] == ':')
-							continue;
-
-						if(routeTokens[i][0] != ':' && routeTokens[i] != urlParams[i])
+					for(let [index, token] of routeTokens.entries()) {
+						if(token[0] != ":" && urlParams[index] != token)
 							break;
 
-						if(i == routeTokens.length - 1)
-							return routes[x];
+						if(index == routeTokens.length - 1)
+							return routes[route];
 					}
 				}
 			}
 
-			if(!route) {
+			if(!tempRoute) {
 				return routes["/404"];
 			}			
 
@@ -89,6 +86,7 @@ define(['js/marvelConnector'], function () {
 		    if (el && route.controller) {
 		        // Render route template with John Resig's template engine:
 		        var templateUrl = 'partials/' + route.templateId + '.html';
+
 		        require(['text!' + templateUrl], function (template) {
 		        	el.innerHTML = Mustache.render(template, new route.controller(urlParams));
 		    	});

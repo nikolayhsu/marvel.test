@@ -9,7 +9,7 @@ html,body{
 }
 
 .footer {
-	position: absolute;
+	position: fixed;
 	bottom: 0;
 	width: 100%;
 	height: 60px;
@@ -17,6 +17,7 @@ html,body{
 }
 
 .footer > div {
+	padding-top: 15px;
 	text-align: center;
 	color: #FFF;
 }
@@ -80,6 +81,7 @@ button.go-button:hover {
 	opacity: 0.8;
 }
 
+div.no-result,
 td.no-result {
 	text-align: center;
 	font-weight: bold;
@@ -88,6 +90,20 @@ td.no-result {
 
 div.character-bio {
 	font-size: 20px;
+}
+
+#overlay {
+    background: rgba(255, 255, 255, 0.6);
+    color: #666666;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 5000;
+    top: 0;
+    left: 0;
+    float: left;
+    text-align: center;
+    padding-top: 25%;
 }
 
 @media (max-width: 978px) {
@@ -107,5 +123,9 @@ div.character-bio {
 	div.character-bio {
 		margin-top: 50px;
 		font-size: 16px;
+	}
+
+	.page-header {
+		padding-top: 20px;
 	}
 }
