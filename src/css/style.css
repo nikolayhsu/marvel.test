@@ -128,4 +128,8 @@ div.character-bio {
 	.page-header {
 		padding-top: 20px;
 	}
+
+	#overlay {
+		padding-top: 50%;
+	}
 }
