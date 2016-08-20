@@ -126,9 +126,19 @@ require(
                 });
             }
 
+            var changeFilter = function () {
+                var filter = document.getElementById('filter').value;
+
+                if (typeof(Storage) !== "undefined") {
+                    localStorage.setItem("filter", filter);
+                    localStorage.setItem("filterTimestamp", Date.now());
+                }
+            }
+
             var bindElements = function () {
                 var goButton = document.getElementById('go-button');
                 var searchQuery = document.getElementById('search-query');
+                var filterSelect = document.getElementById('filter');
                 
                 if(!(goButton && searchQuery))
                     return;
@@ -136,6 +146,20 @@ require(
                 goButton.onclick = submitSearch;
                 searchQuery.onkeyup = submitSearch;
                 searchQuery.oninput = getSuggestions;
+                filterSelect.onchange = changeFilter;
+
+                if (typeof(Storage) !== "undefined") {
+                    var filter = localStorage.getItem("filter");
+                    var filterTimestamp = localStorage.getItem("filterTimestamp");
+                    
+                    if(filter && filterTimestamp) {
+                        var diff = Date.now() % filterTimestamp;
+
+                        if(diff < 300000) {
+                            filterSelect.value = filter;
+                        }
+                    }
+                }
 
                 clearInterval(interval);
             }
