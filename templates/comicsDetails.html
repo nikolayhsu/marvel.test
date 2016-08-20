@@ -1,0 +1,61 @@
+{{#.}}
+	<div class="container character-bio">
+		<div class="col-md-3 text-center">
+			<img src="{{ thumbnail.path }}/portrait_fantastic.jpg"></img>
+		</div>
+		<div class="col-md-9">
+			<div class="item-description">
+				<ul>
+					<li>{{#description }}{{ description }}{{/description }}{{^description }}No Description Provided{{/description }}</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="table-responsive">
+		<table class="table table-hover">
+			<thead>
+				<th class="text-center">View</th>
+				<th>Series</th>
+			</thead>
+			<tbody>
+				{{#series.name}}
+				<tr>
+					<td class="col-md-2 text-center"><a href="#/series/details/{{series.id}}">View</a></td>
+					<td class="col-md-10">{{ series.name }}</td>
+				</tr>
+				{{/series.name}}
+				{{^series.name}}
+					<tr>
+						<td colspan="2" class="no-result">No Series Found</td>	
+					</tr>
+				{{/series.name}}
+			</tbody>
+		</table>
+	</div>
+	<div class="table-responsive">
+		<table class="table table-hover">
+			<thead>
+				<th class="text-center">View</th>
+				<th>Characters</th>
+			</thead>
+			<tbody>
+				{{#characters.items}}
+				<tr>
+					<td class="col-md-2 text-center"><a href="#/characters/details/{{id}}">View</a></td>
+					<td class="col-md-10">{{ name }}</td>
+				</tr>
+				{{/characters.items}}
+				{{^characters.items}}
+					<tr>
+						<td colspan="2" class="no-result">No Characters Found</td>	
+					</tr>
+				{{/characters.items}}
+			</tbody>
+		</table>
+	</div>	
+{{/.}}
+{{^.}}
+	<div class="no-result">
+		No Results Found
+	</div>
+{{/.}}

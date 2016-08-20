@@ -45,7 +45,9 @@ define([], function () {
 			       	successCallBack(JSON.parse(xhr.responseText).data);
 			    }
 			    else {
-			        console.log(xhr.status);
+			        if (xhr.status === 404) {
+			        	errorCallBack();
+			        }
 			    }
 			};
 			xhr.send();

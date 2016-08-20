@@ -1,6 +1,6 @@
 <div class="container">
 	<div class="page-header">
-		Search comics here....
+		Search series, comics, or characters here....
 	</div>
 
 	<div class="alert alert-danger" hidden>
@@ -17,7 +17,12 @@
 					<option value="series">Series</option>
 				</select>
 			</div>	
-			<input type="text" class="main-search" id="search-query" name="search-query" placeholder="Type in 3 characters or more"></input>
+			<div class="search">
+				<input type="text" class="main-search" id="search-query" name="search-query" autocomplete="off" placeholder="Type in 3 characters or more"></input>
+				<ul id="search-results" class="results">
+					<!-- <li><a href="index.html">Search Result #1<br /><span>Description...</span></a></li> -->
+				</ul>
+			</div>
 			<div class="button-group">
 				<button id="go-button" type="button" class="go-button">GO!</button>
 			</div>

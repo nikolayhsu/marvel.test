@@ -1,0 +1,61 @@
+{{#.}}
+	<div class="container character-bio">
+		<div class="col-md-3 text-center">
+			<img src="{{ thumbnail.path }}/portrait_fantastic.jpg"></img>
+		</div>
+		<div class="col-md-9">
+			<div class="item-description">
+				<ul>
+					<li>{{#description }}{{ description }}{{/description }}{{^description }}No Description Provided{{/description }}</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="table-responsive">
+		<table class="table table-hover">
+			<thead>
+				<th class="text-center">View</th>
+				<th>Series</th>
+			</thead>
+			<tbody>
+				{{#series.items}}
+				<tr>
+					<td class="col-md-2 text-center"><a href="#/series/details/{{id}}">View</a></td>
+					<td class="col-md-10">{{ name }}</td>
+				</tr>
+				{{/series.items}}
+				{{^series.items}}
+					<tr>
+						<td colspan="2" class="no-result">No Comics Found</td>	
+					</tr>
+				{{/series.items}}
+			</tbody>
+		</table>
+	</div>
+	<div class="table-responsive">
+		<table class="table table-hover">
+			<thead>
+				<th class="text-center">View</th>
+				<th>Comics</th>
+			</thead>
+			<tbody>
+				{{#comics.items}}
+				<tr>
+					<td class="col-md-2 text-center"><a href="#/comics/details/{{id}}">View</a></td>
+					<td class="col-md-10">{{ name }}</td>
+				</tr>
+				{{/comics.items}}
+				{{^comics.items}}
+					<tr>
+						<td colspan="2" class="no-result">No Comics Found</td>	
+					</tr>
+				{{/comics.items}}
+			</tbody>
+		</table>
+	</div>
+{{/.}}
+{{^.}}
+	<div class="no-result">
+		No Results Found
+	</div>
+{{/.}}
