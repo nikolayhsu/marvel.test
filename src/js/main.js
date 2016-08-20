@@ -223,11 +223,10 @@ require(
                 require([`text!templates/${templateName}`], function (template) {
                     var panel = document.getElementById('main-panel');
                     panel.innerHTML = Mustache.render(template, model);
+                    var header = document.getElementById('header');
+                    header.innerHTML = model[categories[urlParams.category]]; 
                     switchOverlay(false);
                 });
-
-                var header = document.getElementById('header');
-                header.innerHTML = model[categories[urlParams.category]];  
             }, function () {
                 require(['text!templates/error.html'], function (template) {
                     var model = {
@@ -294,11 +293,10 @@ require(
                 require([`text!templates/${templateName}`], function (template) {
                     var panel = document.getElementById('main-panel');
                     panel.innerHTML = Mustache.render(template, model);
+                    var header = document.getElementById('header');
+                    header.innerHTML = 'List of ' + urlParams.filter + ' --- ' + urlParams.query.replace(/_/g, " ");   
                     switchOverlay(false);
-                });
-
-                var header = document.getElementById('header');
-                header.innerHTML = 'List of ' + urlParams.filter + ' --- ' + urlParams.query.replace(/_/g, " ");               
+                });              
             });
         });
 
