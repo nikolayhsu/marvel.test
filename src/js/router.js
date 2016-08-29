@@ -52,6 +52,7 @@ define([], function () {
 
 	var routeHandler = (function () {
 		var el = null;
+		var currentUrlParams = {};
 
 		function getTemplate(templateId) {
 			var templateUrl = 'partials/' + templateId + '.html';
@@ -70,7 +71,13 @@ define([], function () {
 				}
 			}
 
+			currentUrlParams = params;
+
 			return params;
+		}
+
+		function getCurrentUrlParams() {
+			return currentUrlParams;
 		}
 
 		function router () {
@@ -83,18 +90,20 @@ define([], function () {
 
 		    var urlParams = getUrlParameters(route.path, url);
 		    // Do we have both a view and a route?
+
 		    if (el && route.controller) {
 		        // Render route template with John Resig's template engine:
 		        var templateUrl = 'partials/' + route.templateId + '.html';
-
-		        require(['text!' + templateUrl], function (template) {
-		        	el.innerHTML = Mustache.render(template, new route.controller(urlParams));
+		        require.undef('controller/' + route.controller + 'Controller');
+		        require(['text!' + templateUrl, 'controller/' + route.controller + 'Controller'], function (template, controller) {
+		        	el.innerHTML = Mustache.render(template, controller);
 		    	});
 		    }
 		}
 
 		return {
-			"router": router
+			"router": router,
+			"getCurrentUrlParams": getCurrentUrlParams
 		};
 	})();
 
